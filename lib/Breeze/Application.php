@@ -1537,7 +1537,7 @@ class Dispatcher
      */
     protected function _processRoute($pattern, $handler)
     {
-        if ($this->_requestUri != $pattern) {
+        if ($this->_requestUri != rtrim($pattern, '/')) {
             throw new PassException();
         }
 
@@ -1561,6 +1561,8 @@ class Dispatcher
         if (!preg_match($pattern, $this->_requestUri, $matches)) {
             throw new PassException();
         }
+        
+        $matches = array_map(urldecode, $matches);
 
         $handler($this->_application, $matches);
     }
